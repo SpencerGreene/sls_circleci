@@ -10,6 +10,14 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:6.10
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: root
+
+      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle-test_test
 
     steps:
       - checkout
@@ -27,18 +35,20 @@ jobs:
             sudo npm i -g serverless
             npm install
 
+      - run: sudo apt install postgresql-client
+
+
       # run tests
-      - run: 
+      - run:
           name: Run tests with code coverage
           command: npm test --coverage
 
-      # deploy app            
+      # deploy app
       - run:
-          name: Deploy application 
+          name: Deploy application
           command: sls deploy -v
 
       - save_cache:
           paths:
             - node_modules
           key: dependencies-cache-{{ checksum "package.json" }}
-        
