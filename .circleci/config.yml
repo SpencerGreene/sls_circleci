@@ -35,7 +35,7 @@ jobs:
             sudo npm i -g serverless
             npm install
 
-      - run: sudo apt-get install postgresql-client
+      - run: sudo apt-get install postgresql-client-9.3
 
 
       # run tests
